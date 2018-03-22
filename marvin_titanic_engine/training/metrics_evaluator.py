@@ -26,52 +26,39 @@ class MetricsEvaluator(EngineBaseTraining):
         super(MetricsEvaluator, self).__init__(**kwargs)
 
     def execute(self, params, **kwargs):
-        """
-        Setup the metrics with the result of the algorithms used to test the model.
-        Use the self.dataset and self.model prepared in the last actions.
+        from sklearn import metrics
+        import numpy as np
 
-        Eg.
+        all_metrics = {}
 
-            self.marvin_metrics = {...}
-        """
+        _model = self.marvin_model
+        for model_type, fitted_model in _model.iteritems():
 
+            y_predicted = fitted_model.predict(self.marvin_dataset['X_test'])
 
-        for model_type, fitted_model in self.marvin_model.iteritems():
-            print("Model Type: {0}\n{1}".format(
-                model_type, fitted_model.best_estimator_.get_params())
-            )
-            print("Accuracy Score: {}%".format(
-                round(fitted_model.best_score_, 4))
-            )
+            all_metrics[model_type] = {}
+            all_metrics[model_type]["report"] = metrics.classification_report(y_predicted, self.marvin_dataset['y_test'])
+            all_metrics[model_type]["confusion_matrix"] = metrics.confusion_matrix(y_predicted, self.marvin_dataset['y_test'])
+
             # Print the classification report of `y_test` and `predicted`
             print("Classification Report:\n")
-            print(
-                metrics.classification_report(
-                    fitted_model.predict(self.marvin_dataset['X_test']),
-                    self.marvin_dataset['y_test'])
-            )
+            print(all_metrics[model_type]["report"])
 
             # Print the confusion matrix
             print("Confusion Matrix:\n")
-            print(
-                metrics.confusion_matrix(
-                    fitted_model.predict(self.marvin_dataset['X_test']),
-                    self.marvin_dataset['y_test']
-                )
-            )
+            print(all_metrics[model_type]["confusion_matrix"])
             print("\n\n")
-            importances = self.marvin_model['rf'].best_estimator_.feature_importances_
 
-            indices = np.argsort(importances)[::-1]
+        importances = _model["rf"].best_estimator_.feature_importances_
+        indices = np.argsort(importances)[::-1]
 
-            # Print the feature ranking
-            print("Feature ranking:")
+        # Print the feature ranking
+        print("Feature ranking:")
 
-            for f in range(self.marvin_dataset['X_train'].shape[1]):
-                print("%d. feature %s (%f)" % (
-                    f + 1,
-                    self.marvin_dataset['X_train'].columns[indices[f]],
-                    importances[indices[f]]
-                ))
+        all_metrics["feature_ranking"] = []
+        for f in range(self.marvin_dataset['X_train'].shape[1]):
+            all_metrics["feature_ranking"].append((f + 1, params["pred_cols"][indices[f]], importances[indices[f]]))
+            print("%d. feature %s (%f)" % all_metrics["feature_ranking"][f])
 
-            self.marvin_metrics = {}
+        self.marvin_metrics = all_metrics
+

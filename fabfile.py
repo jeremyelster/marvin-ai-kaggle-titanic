@@ -181,8 +181,8 @@ def engine_status():
     if pid_file_exists.succeeded:
         is_running = run("ps $(cat /var/run/marvin/engines/{package}.pid)".format(package=package), quiet=True)
         if is_running.succeeded:
-            print "Your engine is running :)"
+            print("Your engine is running :)"
         else:
-            print "Your engine is not running :("
+            print("Your engine is not running :)"
     else:
-        print "Your engine is not running :("
+        print("Your engine is not running :)"

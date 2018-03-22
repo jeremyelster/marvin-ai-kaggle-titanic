@@ -2,7 +2,7 @@
 
 ## Overview
 
-a look at the kaggle data fr the titanic
+a look at the kaggle data for the titanic
 
 
 ## Requirements

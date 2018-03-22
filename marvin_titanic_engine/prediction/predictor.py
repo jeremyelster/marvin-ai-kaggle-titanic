@@ -23,16 +23,11 @@ class Predictor(EngineBasePrediction):
         super(Predictor, self).__init__(**kwargs)
 
     def execute(self, input_message, params, **kwargs):
-        """
-        Return the predicted value in a json parsable object format.
-        Use the self.model and self.metrics objects if necessary.
-        """
-        input_message = [[50, 3, 0]]
-
-        final_result = {
-            "prediction1": self.marvin_model['rf'].predict(input_message)[0],
-            "prediction2": self.marvin_model['svm'].predict(input_message)[0]
-
+        final_prediction = {
+            "prediction1": self.marvin_model['rf'].predict([input_message])[0],
+            "prediction2": self.marvin_model['svm'].predict([input_message])[0]
         }
 
-        print("Final Result:\n{}".format(final_result))
+        print(final_prediction)
+
+        return final_prediction

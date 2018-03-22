@@ -29,27 +29,16 @@ class Trainer(EngineBaseTraining):
         super(Trainer, self).__init__(**kwargs)
 
     def execute(self, params, **kwargs):
-        """
-        Setup the model with the result of the algorithm used to training.
-        Use the self.dataset prepared in the last action as source of data.
+        from sklearn import svm, neighbors, tree
+        from sklearn.model_selection import StratifiedShuffleSplit, train_test_split, cross_val_score, GridSearchCV
+        from sklearn.ensemble import RandomForestClassifier
+        from sklearn.preprocessing import StandardScaler, scale
+        from sklearn.linear_model import LogisticRegression
 
-        Eg.
-
-            self.marvin_model = {...}
-        """
-
-        # Set the parameter candidates
-        parameter_candidates = [
-            {'C': [1, 10, 100], 'gamma': [0.01, 0.001], 'kernel': ['linear']},
-            {'C': [1, 10, 100], 'gamma': [0.01, 0.001], 'kernel': ['rbf']},
-        ]
+        print("\n\nStarting grid search using SVM!")
 
         # Create a classifier with the parameter candidates
-        svm_grid = GridSearchCV(
-            estimator=svm.SVC(),
-            param_grid=parameter_candidates,
-            n_jobs=-1
-        )
+        svm_grid = GridSearchCV(estimator=svm.SVC(), param_grid=params["svm"], n_jobs=-1)
 
         # Train the classifier on training data
         svm_grid.fit(
@@ -57,28 +46,23 @@ class Trainer(EngineBaseTraining):
             self.marvin_dataset['y_train']
         )
 
-        # use a full grid over all parameters
-        parameter_candidates = {
-            "max_depth": [3, None],
-            "random_state": [0],
-            "min_samples_split": [2],  # , 3, 10],
-            "min_samples_leaf": [1],  # , 3, 10],
-            "n_estimators": [20],  # , 50],
-            "bootstrap": [True, False],
-            "criterion": ["gini", "entropy"]
-        }
+        print("Model Type: SVM\n{}".format(svm_grid.best_estimator_.get_params()))
+        print("Accuracy Score: {}%".format(round(svm_grid.best_score_, 4)))
+
+        print("\n\nStarting grid search using RandomForestClassifier!")
 
         # run grid search
-        rf_grid = GridSearchCV(
-            estimator=RandomForestClassifier(),
-            param_grid=parameter_candidates
-        )
+        rf_grid = GridSearchCV(estimator=RandomForestClassifier(), param_grid=params["rf"])
         rf_grid.fit(
             self.marvin_dataset['X_train'],
             self.marvin_dataset['y_train']
         )
 
+        print("Model Type: RF\n{}".format(rf_grid.best_estimator_.get_params()))
+        print("Accuracy Score: {}%".format(round(rf_grid.best_score_, 4)))
+
         self.marvin_model = {
             'svm': svm_grid,
             'rf': rf_grid
         }
+
