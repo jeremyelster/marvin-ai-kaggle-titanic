@@ -34,5 +34,8 @@ class AcquisitorAndCleaner(EngineBaseDataHandler):
         print ("{} samples to train with {} features...".format(train_df.shape[0], train_df.shape[1]))
         print ("{} samples to test...".format(test_df.shape[0]))
 
-        self.marvin_initial_dataset = {'train': train_df, 'test': test_df}
+        self.marvin_initial_dataset = {
+            'train': train_df,
+            'test': test_df
+        }
 

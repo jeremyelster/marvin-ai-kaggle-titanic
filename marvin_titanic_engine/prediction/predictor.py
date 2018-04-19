@@ -24,8 +24,8 @@ class Predictor(EngineBasePrediction):
 
     def execute(self, input_message, params, **kwargs):
         final_prediction = {
-            "prediction1": self.marvin_model['rf'].predict([input_message])[0],
-            "prediction2": self.marvin_model['svm'].predict([input_message])[0]
+            "prediction_rf": self.marvin_model['rf'].predict([input_message])[0],
+            "prediction_svm": self.marvin_model['svm'].predict([input_message])[0]
         }
 
         print(final_prediction)

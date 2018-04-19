@@ -32,7 +32,7 @@ class TrainingPreparator(EngineBaseDataHandler):
 
         # Feature Engineering
         data_X = train_no_na[params["pred_cols"]]
-        data_X.loc[:, 'Sex'] = data_X['Sex'].map({'male': 1, 'female': 0})
+        data_X.loc[:, 'Sex'] = data_X.loc[:, 'Sex'].map({'male': 1, 'female': 0})
         data_y = train_no_na[params["dep_var"]]
 
         # Prepare for Stratified Shuffle Split

@@ -12,6 +12,6 @@
         "bootstrap": [true, false],
         "criterion": ["gini", "entropy"]
     },
-    "pred_cols": ["Age", "Pclass", "Sex"],
+    "pred_cols": ["Age", "Pclass", "Sex", "Fare"],
     "dep_var": "Survived"
 }
