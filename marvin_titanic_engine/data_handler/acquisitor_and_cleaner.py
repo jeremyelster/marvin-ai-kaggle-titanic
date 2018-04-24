@@ -12,6 +12,8 @@ from .._compatibility import six
 from .._logging import get_logger
 
 from marvin_python_toolbox.engine_base import EngineBaseDataHandler
+from marvin_python_toolbox.common.data import MarvinData
+
 
 __all__ = ['AcquisitorAndCleaner']
 

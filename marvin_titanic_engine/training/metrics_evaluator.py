@@ -34,11 +34,11 @@ class MetricsEvaluator(EngineBaseTraining):
         _model = self.marvin_model
         for model_type, fitted_model in _model.iteritems():
 
-            y_predicted = fitted_model.predict(self.marvin_dataset['X_test'])
+            y_predicted = fitted_model.predict(self.marvin_dataset['X_train'])
 
             all_metrics[model_type] = {}
-            all_metrics[model_type]["report"] = metrics.classification_report(y_predicted, self.marvin_dataset['y_test'])
-            all_metrics[model_type]["confusion_matrix"] = metrics.confusion_matrix(y_predicted, self.marvin_dataset['y_test'])
+            all_metrics[model_type]["report"] = metrics.classification_report(y_predicted, self.marvin_dataset['y_train'])
+            all_metrics[model_type]["confusion_matrix"] = metrics.confusion_matrix(y_predicted, self.marvin_dataset['y_train'])
 
             # Print the classification report of `y_test` and `predicted`
             print("Classification Report:\n")

@@ -38,7 +38,7 @@ class Trainer(EngineBaseTraining):
         print("\n\nStarting grid search using SVM!")
 
         # Create a classifier with the parameter candidates
-        svm_grid = GridSearchCV(estimator=svm.SVC(), param_grid=params["svm"], n_jobs=-1)
+        svm_grid = GridSearchCV(estimator=svm.SVC(), param_grid=params["svm"], cv=self.marvin_dataset["sss"], n_jobs=-1)
 
         # Train the classifier on training data
         svm_grid.fit(
@@ -52,7 +52,7 @@ class Trainer(EngineBaseTraining):
         print("\n\nStarting grid search using RandomForestClassifier!")
 
         # run grid search
-        rf_grid = GridSearchCV(estimator=RandomForestClassifier(), param_grid=params["rf"])
+        rf_grid = GridSearchCV(estimator=RandomForestClassifier(), param_grid=params["rf"], cv=self.marvin_dataset["sss"])
         rf_grid.fit(
             self.marvin_dataset['X_train'],
             self.marvin_dataset['y_train']
